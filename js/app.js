@@ -202,14 +202,18 @@ function renderTasks(tasksToRender){
      MarkAsCompleteButton.textContent ="Mark as Complete";
      MarkAsCompleteButton.classList.add("completion-btn");
      div.append(MarkAsCompleteButton);
-
      MarkAsCompleteButton.dataset.id= task.id; //dataset.id creates data-id attribute dynamically | task.id: id
 
 
+     const deleteButton =document.createElement("button");
+     deleteButton.textContent ="Delete Task";
+     deleteButton.classList.add("delete-btn");
+     div.append(deleteButton);
+     deleteButton.dataset.id = task.id;
 
-  }
+  };
 
-}
+};
 
 
 taskForm.addEventListener("submit",(event)=>{
@@ -249,18 +253,32 @@ searchInput.addEventListener("input", ()=>{
 });
 
 taskList.addEventListener("click",(event)=>{
-  if(!event.target.classList.contains("completion-btn")) return;
+  if(
+    !event.target.classList.contains("completion-btn") &&
+     !event.target.classList.contains("delete-btn")
+    ) return;
 
-  const clickedTaskId = event.target.dataset.id;
 
-  toggleTaskWholeProcess(Number(clickedTaskId)); //we use number because dataset values are strings but this function expects a number
+    if (event.target.classList.contains("completion-btn")) {
+      const clickedTaskId = event.target.dataset.id;
 
-  renderTasks(loadedTasks);
+      toggleTaskWholeProcess(Number(clickedTaskId)); //we use number because dataset values are strings but this function expects a number
+
+      renderTasks(loadedTasks);
+    } else if (event.target.classList.contains("delete-btn")) {
+      const clickedTaskId = event.target.dataset.id;
+
+      deleteTaskWholeProcess(Number(clickedTaskId)); //we use number because dataset values are strings but this function expects a number
+
+      renderTasks(loadedTasks);
+    }
+
+  
 
 
   
 
-})
+});
 
 
 renderTasks(loadedTasks);
