@@ -28,6 +28,9 @@ const taskPriorityInput = document.querySelector("#task-priority");
 const taskList = document.querySelector("#task-list");
 const filterButtons = document.querySelector("#filter-buttons");
 const searchInput = document.querySelector("#search-input");
+const totalTasks = document.querySelector("#total-tasks");
+const completedTasks = document.querySelector("#completed-tasks")
+const pendingTasks = document.querySelector("#pending-tasks")
 let editingTaskId = null;
 
 function createTaskWholeProcess(title, description, priority) {
@@ -199,28 +202,58 @@ function renderTasks(tasksToRender){
      }
      div.append(paragraph2)
 
+     const taskActions = document.createElement("div");
+     taskActions.classList.add("task-actions");
+
+
+
      const MarkAsCompleteButton = document.createElement("button");
      MarkAsCompleteButton.textContent ="Mark as Complete";
      MarkAsCompleteButton.classList.add("completion-btn");
-     div.append(MarkAsCompleteButton);
+     taskActions.append(MarkAsCompleteButton);
      MarkAsCompleteButton.dataset.id= task.id; //dataset.id creates data-id attribute dynamically | task.id: id
 
 
      const deleteButton =document.createElement("button");
      deleteButton.textContent ="Delete Task";
      deleteButton.classList.add("delete-btn");
-     div.append(deleteButton);
+     taskActions.append(deleteButton);
      deleteButton.dataset.id = task.id;
 
      const editButton = document.createElement("button");
      editButton.textContent = "Edit Task";
      editButton.classList.add("edit-btn");
-     div.append(editButton);
+     taskActions.append(editButton);
      editButton.dataset.id = task.id;
+
+
+     div.append(taskActions);
 
   };
 
+  updateStatistics();
+
 };
+
+
+// statistics:
+
+
+function updateStatistics(){
+  const statistics = getTaskStatistics();
+totalTasks.textContent =statistics.total;
+
+completedTasks.textContent =statistics.completed;
+
+pendingTasks.textContent =statistics.pending;
+
+
+}
+
+
+
+
+
 
 
 taskForm.addEventListener("submit", (event) => {
@@ -252,6 +285,9 @@ taskForm.addEventListener("submit", (event) => {
       taskForm.reset();
     }
   }
+
+
+  
 });
 
 filterButtons.addEventListener("click", (event)=>{
