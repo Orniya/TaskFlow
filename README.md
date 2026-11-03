@@ -1,4 +1,5 @@
 # TaskFlow 
+### Live: [Task-Manager-link](https://task-manager-app-one-lilac.vercel.app/)
 A simple and interactive task management application built with **HTML, CSS, and Vanilla JavaScript**. TaskFlow allows users to create, manage, search, filter, and track their daily tasks.
 
 ## ✨ Features
@@ -43,7 +44,7 @@ TaskFlow/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/Orniya/TaskFlow)
 ```
 
 ### 2. Navigate to the Project Directory
