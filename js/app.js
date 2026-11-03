@@ -28,6 +28,7 @@ const taskPriorityInput = document.querySelector("#task-priority");
 const taskList = document.querySelector("#task-list");
 const filterButtons = document.querySelector("#filter-buttons");
 const searchInput = document.querySelector("#search-input");
+let editingTaskId = null;
 
 function createTaskWholeProcess(title, description, priority) {
   const validateTaskVariable = validateTask(title, description, priority);
@@ -211,25 +212,46 @@ function renderTasks(tasksToRender){
      div.append(deleteButton);
      deleteButton.dataset.id = task.id;
 
+     const editButton = document.createElement("button");
+     editButton.textContent = "Edit Task";
+     editButton.classList.add("edit-btn");
+     div.append(editButton);
+     editButton.dataset.id = task.id;
+
   };
 
 };
 
 
-taskForm.addEventListener("submit",(event)=>{
+taskForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  console.log("Form Submitted");
-
   const title = taskTitleInput.value;
   const description = taskDescriptionInput.value;
   const priority = taskPriorityInput.value;
 
-  const createdTask=createTaskWholeProcess(title,description,priority);
-  console.log(createdTask);
+  if (editingTaskId === null) {
+    const createdTask = createTaskWholeProcess(title, description, priority);
+    console.log(createdTask);
 
-  renderTasks(loadedTasks)
 
+    if (Array.isArray(createdTask)) {
+      renderTasks(loadedTasks);
+      taskForm.reset();
+    }
 
+  } else {
+    const updatedTask = updateTaskWholeProcess(editingTaskId, {
+      title: title,
+      description: description,
+      priority: priority,
+    });
+
+    if (Array.isArray(updatedTask)) {
+      editingTaskId = null;
+      renderTasks(loadedTasks);
+      taskForm.reset();
+    }
+  }
 });
 
 filterButtons.addEventListener("click", (event)=>{
@@ -252,10 +274,14 @@ searchInput.addEventListener("input", ()=>{
 
 });
 
+
+
 taskList.addEventListener("click",(event)=>{
   if(
     !event.target.classList.contains("completion-btn") &&
-     !event.target.classList.contains("delete-btn")
+     !event.target.classList.contains("delete-btn") &&
+     !event.target.classList.contains("edit-btn")
+
     ) return;
 
 
@@ -271,12 +297,16 @@ taskList.addEventListener("click",(event)=>{
       deleteTaskWholeProcess(Number(clickedTaskId)); //we use number because dataset values are strings but this function expects a number
 
       renderTasks(loadedTasks);
+
+    } else if(event.target.classList.contains("edit-btn")){
+      const clickedTaskId = event.target.dataset.id;
+     const taskToEdit = getTaskById(loadedTasks, Number(clickedTaskId));
+     taskTitleInput.value = taskToEdit.title;
+     taskDescriptionInput.value = taskToEdit.description;
+     taskPriorityInput.value = taskToEdit.priority;
+
+      editingTaskId = Number(clickedTaskId);
     }
-
-  
-
-
-  
 
 });
 
